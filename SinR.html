@@ -29,6 +29,7 @@
       h3 {
         text-align: center;
         margin-bottom: 20px;
+        color: #333;
       }
 
       .info-grid {
@@ -46,15 +47,18 @@
       .info-grid label {
         font-weight: bold;
         margin-bottom: 5px;
+        color: #333;
       }
 
       input[type="text"],
       textarea {
-        padding: 6px;
+        padding: 8px;
         font-size: 14px;
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 4px;
+        font-family: Arial, sans-serif;
+        background-color: white;
       }
 
       textarea {
@@ -65,24 +69,32 @@
 
       .section {
         margin-bottom: 30px;
+        break-inside: avoid;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
+        break-inside: avoid;
       }
 
       table,
       th,
       td {
-        border: 1px solid #ccc;
+        border: 1px solid #333;
       }
 
       th,
       td {
         padding: 8px;
         text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
       }
 
       .signatures {
@@ -91,6 +103,7 @@
         margin-top: 40px;
         padding: 0 10px;
         flex-wrap: wrap;
+        break-inside: avoid;
       }
 
       .signatures div {
@@ -123,6 +136,8 @@
         font-size: 16px;
         border: 0;
         transition: all 250ms;
+        text-decoration: none;
+        display: inline-block;
       }
 
       .button-33:hover {
@@ -181,6 +196,27 @@
         flex-wrap: wrap;
       }
 
+      /* Estilos para mejorar PDF */
+      .pdf-mode {
+        background-color: white !important;
+      }
+
+      .pdf-mode .container {
+        box-shadow: none !important;
+        max-width: none !important;
+        width: 100% !important;
+      }
+
+      .pdf-mode .button-container {
+        display: none !important;
+      }
+
+      /* Totales calculados automáticamente */
+      .total-auto {
+        background-color: #f0f8ff;
+        font-weight: bold;
+      }
+
       @media (max-width: 600px) {
         .info-grid {
           grid-template-columns: 1fr;
@@ -209,22 +245,32 @@
 
       <section class="info-grid">
         <div>
-          <label>FECHA:</label
-          ><input type="text" placeholder="San Salvador, __ de ____ de 2025" />
+          <label>FECHA:</label>
+          <input
+            type="text"
+            id="fecha"
+            placeholder="San Salvador, __ de ____ de 2025"
+          />
         </div>
         <div>
-          <label>NOMBRE:</label
-          ><input type="text" placeholder="Nombre del cliente" />
+          <label>NOMBRE:</label>
+          <input type="text" id="nombre" placeholder="Nombre del cliente" />
         </div>
         <div>
-          <label>VEHÍCULO:</label><input type="text" placeholder="Marca" />
+          <label>VEHÍCULO:</label>
+          <input type="text" id="vehiculo" placeholder="Marca" />
         </div>
         <div>
-          <label>MODELO:</label><input type="text" placeholder="Modelo" />
+          <label>MODELO:</label>
+          <input type="text" id="modelo" placeholder="Modelo" />
         </div>
-        <div><label>AÑO:</label><input type="text" placeholder="Año" /></div>
         <div>
-          <label>PLACA:</label><input type="text" placeholder="Placa" />
+          <label>AÑO:</label>
+          <input type="text" id="ano" placeholder="Año" />
+        </div>
+        <div>
+          <label>PLACA:</label>
+          <input type="text" id="placa" placeholder="Placa" />
         </div>
       </section>
 
@@ -233,22 +279,42 @@
         <table>
           <thead>
             <tr>
-              <th>Descripción</th>
-              <th>Valor</th>
+              <th style="width: 70%">Descripción</th>
+              <th style="width: 30%">Valor</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <textarea
+                  id="mano_desc_1"
                   placeholder="Descripción del trabajo realizado..."
                 ></textarea>
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="mano_valor_1"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><textarea placeholder="Otra descripción..."></textarea></td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <textarea
+                  id="mano_desc_2"
+                  placeholder="Otra descripción..."
+                ></textarea>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  id="mano_valor_2"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -259,25 +325,47 @@
         <table>
           <thead>
             <tr>
-              <th>Cant.</th>
-              <th>Descripción</th>
-              <th>Valor</th>
+              <th style="width: 15%">Cant.</th>
+              <th style="width: 55%">Descripción</th>
+              <th style="width: 30%">Valor</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="ext_cant_1" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="ext_desc_1"
+                  placeholder="Descripción del servicio"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="ext_valor_1"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="ext_cant_2" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="ext_desc_2"
+                  placeholder="Descripción del servicio"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="ext_valor_2"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -288,96 +376,227 @@
         <table>
           <thead>
             <tr>
-              <th>Cant.</th>
-              <th>Descripción</th>
-              <th>Valor</th>
+              <th style="width: 15%">Cant.</th>
+              <th style="width: 55%">Descripción</th>
+              <th style="width: 30%">Valor</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_1" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_1"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_1"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_2" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_2"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_2"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_3" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_3"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_3"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_4" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_4"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_4"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_5" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_5"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_5"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_6" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_6"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_6"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_7" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_7"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_7"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_8" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_8"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_8"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_9" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_9"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_9"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_10" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_10"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_10"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_11" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_11"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_11"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
-
             <tr>
-              <td><input type="text" placeholder="1" /></td>
+              <td><input type="text" id="rep_cant_12" placeholder="1" /></td>
               <td>
-                <input type="text" placeholder="Descripción del repuesto" />
+                <input
+                  type="text"
+                  id="rep_desc_12"
+                  placeholder="Descripción del repuesto"
+                />
               </td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="rep_valor_12"
+                  class="valor-input"
+                  placeholder="0.00"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -388,24 +607,77 @@
         <table>
           <tbody>
             <tr>
-              <td>Mano de Obra</td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td style="width: 70%; font-weight: bold">Mano de Obra</td>
+              <td style="width: 30%">
+                <input
+                  type="text"
+                  id="total_mano"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td>Repuestos</td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td style="font-weight: bold">Trabajo Externo</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_externo"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td>Subtotal</td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td style="font-weight: bold">Repuestos</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_repuestos"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td>IVA</td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td style="font-weight: bold">Subtotal</td>
+              <td>
+                <input
+                  type="text"
+                  id="subtotal"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
             </tr>
             <tr>
-              <td><strong>Total General</strong></td>
-              <td><input type="text" placeholder="$ 0.00" /></td>
+              <td style="font-weight: bold">IVA (13%)</td>
+              <td>
+                <input
+                  type="text"
+                  id="iva"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr style="background-color: #f0f0f0">
+              <td style="font-weight: bold; font-size: 16px">Total General</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_general"
+                  class="total-auto"
+                  style="font-weight: bold; font-size: 16px"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -413,17 +685,39 @@
 
       <section class="section">
         <h3>Notas Importantes</h3>
-        <textarea placeholder="Escribe aquí las notas relevantes..."></textarea>
+        <textarea
+          id="notas"
+          placeholder="Escribe aquí las notas relevantes..."
+          style="min-height: 80px"
+        ></textarea>
       </section>
 
       <section class="signatures">
         <div>
-          <p>________________________</p>
-          <p>Marlon Guevara</p>
+          <p
+            style="
+              border-bottom: 2px solid #333;
+              width: 200px;
+              margin: 0 auto 10px auto;
+            "
+          >
+            &nbsp;
+          </p>
+          <p style="font-weight: bold">Marlon Guevara</p>
+          <p style="font-size: 12px; color: #666">Técnico Responsable</p>
         </div>
         <div>
-          <p>________________________</p>
-          <p>Autorizado:</p>
+          <p
+            style="
+              border-bottom: 2px solid #333;
+              width: 200px;
+              margin: 0 auto 10px auto;
+            "
+          >
+            &nbsp;
+          </p>
+          <p style="font-weight: bold">Cliente Autorizado</p>
+          <p style="font-size: 12px; color: #666">Firma y Fecha</p>
         </div>
       </section>
 
@@ -445,31 +739,177 @@
     </div>
 
     <script>
+      // Referencias del modal
       const openModal = document.getElementById("openModal");
       const modal = document.getElementById("modalConfirm");
       const confirmDownload = document.getElementById("confirmDownload");
       const cancelModal = document.getElementById("cancelModal");
 
+      // Función para parsear valores monetarios
+      function parseValue(value) {
+        if (!value) return 0;
+        // Remover símbolos y convertir a número
+        return parseFloat(value.toString().replace(/[^0-9.-]/g, "")) || 0;
+      }
+
+      // Función para formatear valores monetarios
+      function formatValue(value) {
+        return value.toFixed(2);
+      }
+
+      // Función para calcular totales automáticamente
+      function calculateTotals() {
+        // Calcular total mano de obra
+        let totalMano = 0;
+        totalMano += parseValue(document.getElementById("mano_valor_1").value);
+        totalMano += parseValue(document.getElementById("mano_valor_2").value);
+        document.getElementById("total_mano").value =
+          "$ " + formatValue(totalMano);
+
+        // Calcular total trabajo externo
+        let totalExterno = 0;
+        totalExterno += parseValue(
+          document.getElementById("ext_valor_1").value
+        );
+        totalExterno += parseValue(
+          document.getElementById("ext_valor_2").value
+        );
+        document.getElementById("total_externo").value =
+          "$ " + formatValue(totalExterno);
+
+        // Calcular total repuestos
+        let totalRepuestos = 0;
+        for (let i = 1; i <= 12; i++) {
+          totalRepuestos += parseValue(
+            document.getElementById("rep_valor_" + i).value
+          );
+        }
+        document.getElementById("total_repuestos").value =
+          "$ " + formatValue(totalRepuestos);
+
+        // Calcular subtotal
+        const subtotal = totalMano + totalExterno + totalRepuestos;
+        document.getElementById("subtotal").value =
+          "$ " + formatValue(subtotal);
+
+        // Calcular IVA (13%)
+        const iva = subtotal * 0.13;
+        document.getElementById("iva").value = "$ " + formatValue(iva);
+
+        // Calcular total general
+        const totalGeneral = subtotal + iva;
+        document.getElementById("total_general").value =
+          "$ " + formatValue(totalGeneral);
+      }
+
+      // Agregar event listeners a todos los campos de valor
+      document.querySelectorAll(".valor-input").forEach((input) => {
+        input.addEventListener("input", calculateTotals);
+        input.addEventListener("blur", function () {
+          // Formatear el valor cuando se pierde el foco
+          const value = parseValue(this.value);
+          if (value > 0) {
+            this.value = formatValue(value);
+          }
+        });
+      });
+
+      // Auto-resize textareas
+      document.querySelectorAll("textarea").forEach((textarea) => {
+        textarea.addEventListener("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
+        });
+      });
+
+      // Funciones del modal
       openModal.onclick = () => (modal.style.display = "block");
       cancelModal.onclick = () => (modal.style.display = "none");
 
-      confirmDownload.onclick = () => {
-        const element = document.getElementById("formulario");
-        const opt = {
-          margin: 0.5,
-          filename: "formulario-mantenimiento.pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-        };
-        html2pdf().from(element).set(opt).save();
+      // Función de descarga de PDF mejorada
+      confirmDownload.onclick = async () => {
         modal.style.display = "none";
+
+        // Mostrar mensaje de carga
+        const loadingDiv = document.createElement("div");
+        loadingDiv.innerHTML = `
+          <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                      background: white; padding: 30px; border-radius: 10px; 
+                      box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 10000; 
+                      text-align: center; min-width: 250px;">
+            <h3 style="margin: 0 0 15px 0; color: #333;">Generando PDF...</h3>
+            <p style="margin: 0; color: #666;">Por favor espere un momento</p>
+            <div style="margin-top: 15px; width: 100%; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden;">
+              <div style="width: 100%; height: 100%; background: #ff4d4d; animation: loading 2s infinite;"></div>
+            </div>
+          </div>
+          <style>
+            @keyframes loading {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+          </style>
+        `;
+        document.body.appendChild(loadingDiv);
+
+        try {
+          const element = document.getElementById("formulario");
+
+          // Aplicar estilos específicos para PDF
+          document.body.classList.add("pdf-mode");
+
+          // Esperar un momento para que se apliquen los estilos
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
+          // Configuración optimizada para PDF
+          const opt = {
+            margin: 0.4,
+            filename: `formulario-mantenimiento-${
+              new Date().toISOString().split("T")[0]
+            }.pdf`,
+            image: {
+              type: "jpeg",
+              quality: 1.0,
+            },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: "#ffffff",
+              logging: false,
+              scrollX: 0,
+              scrollY: 0,
+              windowWidth: 1200,
+              windowHeight: element.scrollHeight + 100,
+            },
+            jsPDF: {
+              unit: "in",
+              format: "letter",
+              orientation: "portrait",
+            },
+          };
+
+          // Generar y descargar PDF
+          await html2pdf().set(opt).from(element).save();
+        } catch (error) {
+          console.error("Error al generar PDF:", error);
+          alert("Error al generar el PDF. Por favor, inténtelo de nuevo.");
+        } finally {
+          // Limpiar estilos y elementos temporales
+          document.body.classList.remove("pdf-mode");
+          if (loadingDiv.parentNode) {
+            document.body.removeChild(loadingDiv);
+          }
+        }
       };
 
-      // Cierra modal si se hace clic fuera del contenido
+      // Cerrar modal al hacer clic fuera
       window.onclick = (event) => {
         if (event.target == modal) modal.style.display = "none";
       };
+
+      // Calcular totales al cargar la página
+      calculateTotals();
     </script>
   </body>
 </html>
