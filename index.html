@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cotizaciones</title>
+
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: #000;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      h1 {
+        color: white;
+        font-size: 3rem;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        text-align: center;
+        z-index: 1;
+      }
+
+      .button-85 {
+        padding: 1em 3em;
+        font-size: 1.5rem;
+        border: none;
+        outline: none;
+        color: rgb(255, 255, 255);
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        text-decoration: none;
+      }
+
+      .button-85:before {
+        content: "";
+        background: linear-gradient(
+          45deg,
+          #ff0000,
+          #ff7300,
+          #fffb00,
+          #48ff00,
+          #00ffd5,
+          #002bff,
+          #7a00ff,
+          #ff00c8,
+          #ff0000
+        );
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        -webkit-filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing-button-85 20s linear infinite;
+        transition: opacity 0.3s ease-in-out;
+        border-radius: 10px;
+      }
+
+      @keyframes glowing-button-85 {
+        0% {
+          background-position: 0 0;
+        }
+        50% {
+          background-position: 400% 0;
+        }
+        100% {
+          background-position: 0 0;
+        }
+      }
+
+      .button-85:after {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #222;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cotizaciones</h1>
+
+    <a href="conR.html" class="button-85" role="button">Con Retención</a>
+    <a href="sinR.html" class="button-85" role="button">Sin Retención</a>
+
+    <script>
+      var Stars = function (args) {
+        if (args === undefined) args = {};
+        var _scope = this;
+
+        this.stars = [];
+        this.vel = args.vel || 1;
+        this.radius = args.radius || 1;
+        this.alpha = 0.5;
+        this.starsCounter = args.stars || 300;
+        var center = {
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+        };
+        var canvas, context;
+        this.init = function () {
+          canvas = document.createElement("canvas");
+          canvas.style.position = "fixed";
+          canvas.style.top = "0";
+          canvas.style.left = "0";
+          canvas.style.zIndex = "-10";
+          document.body.appendChild(canvas);
+          context = canvas.getContext("2d");
+          context.lineCap = "round";
+          this.start();
+          this.resize();
+          window.addEventListener("resize", this.resize.bind(this));
+        };
+
+        this.start = function () {
+          this.stars = [];
+          for (var i = 0; i < this.starsCounter; i++) {
+            setTimeout(function () {
+              _scope.stars.push(new Star());
+            }, i * 30);
+          }
+        };
+
+        this.resize = function () {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          center.x = canvas.width / 2;
+          center.y = canvas.height / 2;
+        };
+
+        this.animate = function () {
+          window.requestAnimationFrame(this.animate.bind(this));
+          this.render();
+        };
+
+        this.render = function () {
+          context.fillStyle = "rgba(1, 4, 35, 0.8)";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          context.strokeStyle = "white";
+          for (var i = 0; i < this.stars.length; i++) this.stars[i].update();
+        };
+
+        var Star = function () {
+          this.x = center.x;
+          this.y = center.y;
+          this.init = function () {
+            this.radius = Math.random() * _scope.radius;
+            this.x = center.x;
+            this.y = center.y;
+            this.lineWidth = 0;
+            this.vel = {
+              x: Math.random() * 10 - 5,
+              y: Math.random() * 10 - 5,
+            };
+          };
+
+          this.update = function () {
+            this.vel.x *= 1.05;
+            this.vel.y *= 1.05;
+            this.lineWidth += 0.035;
+            this.x0 = this.x;
+            this.y0 = this.y;
+            this.x += this.vel.x;
+            this.y += this.vel.y;
+            this.draw();
+            if (this.isDead()) this.init();
+          };
+
+          this.draw = function () {
+            context.beginPath();
+            context.moveTo(this.x0, this.y0);
+            context.lineTo(this.x, this.y);
+            context.lineWidth = this.lineWidth;
+            context.stroke();
+          };
+
+          this.isDead = function () {
+            return (
+              this.x < 0 ||
+              this.x > canvas.width ||
+              this.y < 0 ||
+              this.y > canvas.height
+            );
+          };
+
+          this.init();
+          return this;
+        };
+
+        this.init();
+        this.animate();
+        return this;
+      };
+
+      var _stars = new Stars();
+    </script>
+  </body>
+</html>

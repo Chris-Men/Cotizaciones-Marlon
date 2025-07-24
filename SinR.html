@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Formulario de Mantenimiento Vehicular</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2,
+      h3 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .info-grid div {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-grid label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      textarea {
+        padding: 6px;
+        font-size: 14px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      textarea {
+        overflow: hidden;
+        resize: none;
+        min-height: 60px;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+
+      .signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        padding: 0 10px;
+        flex-wrap: wrap;
+      }
+
+      .signatures div {
+        margin-bottom: 20px;
+        text-align: center;
+        flex: 1 1 40%;
+      }
+
+      .button-container {
+        text-align: center;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      /* Botón Verde - Volver */
+      .button-33 {
+        background-color: #c2fbd7;
+        border-radius: 100px;
+        box-shadow: rgba(44, 187, 99, 0.2) 0 -25px 18px -14px inset,
+          rgba(44, 187, 99, 0.15) 0 1px 2px, rgba(44, 187, 99, 0.15) 0 2px 4px,
+          rgba(44, 187, 99, 0.15) 0 4px 8px, rgba(44, 187, 99, 0.15) 0 8px 16px,
+          rgba(44, 187, 99, 0.15) 0 16px 32px;
+        color: green;
+        cursor: pointer;
+        padding: 7px 20px;
+        text-align: center;
+        font-size: 16px;
+        border: 0;
+        transition: all 250ms;
+      }
+
+      .button-33:hover {
+        transform: scale(1.05) rotate(-1deg);
+      }
+
+      /* 🔴 Botón Rojo - Descargar PDF */
+      .button-red {
+        background-color: #ff4d4d;
+        border-radius: 100px;
+        color: white;
+        padding: 7px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        transition: all 250ms;
+      }
+
+      .button-red:hover {
+        background-color: #e60000;
+        transform: scale(1.05);
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .modal-content h3 {
+        margin-top: 0;
+      }
+
+      .modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 600px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        th,
+        td {
+          font-size: 13px;
+          padding: 6px;
+        }
+
+        .signatures {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .container {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="formulario">
+      <h2>Formulario de Mantenimiento Vehicular</h2>
+
+      <section class="info-grid">
+        <div>
+          <label>FECHA:</label
+          ><input type="text" placeholder="San Salvador, __ de ____ de 2025" />
+        </div>
+        <div>
+          <label>NOMBRE:</label
+          ><input type="text" placeholder="Nombre del cliente" />
+        </div>
+        <div>
+          <label>VEHÍCULO:</label><input type="text" placeholder="Marca" />
+        </div>
+        <div>
+          <label>MODELO:</label><input type="text" placeholder="Modelo" />
+        </div>
+        <div><label>AÑO:</label><input type="text" placeholder="Año" /></div>
+        <div>
+          <label>PLACA:</label><input type="text" placeholder="Placa" />
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>Mano de Obra</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <textarea
+                  placeholder="Descripción del trabajo realizado..."
+                ></textarea>
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><textarea placeholder="Otra descripción..."></textarea></td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h3>Trabajo Externo</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Cant.</th>
+              <th>Descripción</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h3>Repuestos</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Cant.</th>
+              <th>Descripción</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+
+            <tr>
+              <td><input type="text" placeholder="1" /></td>
+              <td>
+                <input type="text" placeholder="Descripción del repuesto" />
+              </td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h3>Totales</h3>
+        <table>
+          <tbody>
+            <tr>
+              <td>Mano de Obra</td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td>Repuestos</td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td>Subtotal</td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td>IVA</td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+            <tr>
+              <td><strong>Total General</strong></td>
+              <td><input type="text" placeholder="$ 0.00" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h3>Notas Importantes</h3>
+        <textarea placeholder="Escribe aquí las notas relevantes..."></textarea>
+      </section>
+
+      <section class="signatures">
+        <div>
+          <p>________________________</p>
+          <p>Marlon Guevara</p>
+        </div>
+        <div>
+          <p>________________________</p>
+          <p>Autorizado:</p>
+        </div>
+      </section>
+
+      <div class="button-container">
+        <button id="openModal" class="button-red">Descargar PDF</button>
+        <a href="index.html" class="button-33">Volver</a>
+      </div>
+    </div>
+
+    <!-- 🔔 MODAL -->
+    <div id="modalConfirm" class="modal">
+      <div class="modal-content">
+        <h3>¿Deseas descargar este formulario en PDF?</h3>
+        <div class="modal-buttons">
+          <button class="button-red" id="confirmDownload">Sí, descargar</button>
+          <button class="button-33" id="cancelModal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const openModal = document.getElementById("openModal");
+      const modal = document.getElementById("modalConfirm");
+      const confirmDownload = document.getElementById("confirmDownload");
+      const cancelModal = document.getElementById("cancelModal");
+
+      openModal.onclick = () => (modal.style.display = "block");
+      cancelModal.onclick = () => (modal.style.display = "none");
+
+      confirmDownload.onclick = () => {
+        const element = document.getElementById("formulario");
+        const opt = {
+          margin: 0.5,
+          filename: "formulario-mantenimiento.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        };
+        html2pdf().from(element).set(opt).save();
+        modal.style.display = "none";
+      };
+
+      // Cierra modal si se hace clic fuera del contenido
+      window.onclick = (event) => {
+        if (event.target == modal) modal.style.display = "none";
+      };
+    </script>
+  </body>
+</html>
