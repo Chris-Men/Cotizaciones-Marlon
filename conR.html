@@ -5,233 +5,724 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cotizaciones</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-   <link rel="stylesheet" href="style.css">
-    
-   </ion-card>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2,
+      h3 {
+        text-align: center;
+        margin-bottom: 15px;
+        margin-top: 10px;
+        color: #333;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .info-grid div {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-grid label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      input[type="text"],
+      textarea {
+        padding: 8px;
+        font-size: 14px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: Arial, sans-serif;
+        background-color: white;
+      }
+
+      textarea {
+        overflow: hidden;
+        resize: none;
+        min-height: 10px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+        break-inside: avoid;
+      }
+
+      /* Contenedores de páginas */
+      .page-container {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fafafa;
+      }
+
+      .page-1 {
+        page-break-after: always;
+      }
+
+      .page-2 {
+        page-break-after: always;
+      }
+
+      .page-3 {
+        /* Última página, no necesita page-break */
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        break-inside: avoid;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #333;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+      }
+
+      td input,
+      td textarea {
+        width: 100%;
+        border: 1px solid #ddd;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        background: white;
+      }
+
+      td textarea {
+        resize: vertical;
+        min-height: 35px;
+        font-family: inherit;
+      }
+
+      .signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding: 0 10px;
+        flex-wrap: wrap;
+        break-inside: avoid;
+      }
+
+      .signatures div {
+        margin-bottom: 20px;
+        text-align: center;
+        flex: 1 1 40%;
+      }
+
+      .signature-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .signature-line {
+        border-bottom: 2px solid #333;
+        width: 200px;
+        height: 60px;
+        margin: 0 auto 10px auto;
+        position: relative;
+        background-color: white;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+
+      .signature-image {
+        max-height: 50px;
+        max-width: 180px;
+        object-fit: contain;
+      }
+
+      .upload-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .signature-container:hover .upload-btn {
+        opacity: 1;
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .button-container {
+        text-align: center;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      /* Botón Verde - Volver */
+      .button-33 {
+        background-color: #c2fbd7;
+        border-radius: 100px;
+        box-shadow: rgba(44, 187, 99, 0.2) 0 -25px 18px -14px inset,
+          rgba(44, 187, 99, 0.15) 0 1px 2px, rgba(44, 187, 99, 0.15) 0 2px 4px,
+          rgba(44, 187, 99, 0.15) 0 4px 8px, rgba(44, 187, 99, 0.15) 0 8px 16px,
+          rgba(44, 187, 99, 0.15) 0 16px 32px;
+        color: green;
+        cursor: pointer;
+        padding: 7px 20px;
+        text-align: center;
+        font-size: 16px;
+        border: 0;
+        transition: all 250ms;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .button-33:hover {
+        transform: scale(1.05) rotate(-1deg);
+      }
+
+      /* 🔴 Botón Rojo - Descargar PDF */
+      .button-red {
+        background-color: #ff4d4d;
+        border-radius: 100px;
+        color: white;
+        padding: 7px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        transition: all 250ms;
+      }
+
+      .button-red:hover {
+        background-color: #e60000;
+        transform: scale(1.05);
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .modal-content h3 {
+        margin-top: 0;
+      }
+
+      .modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      /* Totales calculados automáticamente */
+      .total-auto {
+        background-color: #f0f8ff !important;
+        font-weight: bold;
+      }
+
+      /* Límite visual para inputs de descripción */
+      .limited-input {
+        position: relative;
+      }
+
+      .char-counter {
+        position: absolute;
+        bottom: 2px;
+        right: 5px;
+        font-size: 10px;
+        color: #999;
+        background: white;
+        padding: 1px 3px;
+      }
+
+      .valor-input {
+        text-align: right;
+      }
+
+      @media (max-width: 600px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        th,
+        td {
+          font-size: 13px;
+          padding: 6px;
+        }
+
+        .signatures {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .container {
+          padding: 15px;
+        }
+
+        .button-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .modal-buttons {
+          flex-direction: column;
+        }
+
+        .page-container {
+          padding: 15px;
+          margin-bottom: 20px;
+        }
+      }
+
+      @media print {
+        * {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        body {
+          margin: 0 !important;
+          padding: 0 !important;
+          font-size: 12px !important;
+        }
+
+        .container {
+          box-shadow: none !important;
+          max-width: none !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        .page-container {
+          border: none !important;
+          background: white !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          page-break-inside: avoid !important;
+        }
+
+        .button-container {
+          display: none !important;
+        }
+
+        .upload-btn {
+          display: none !important;
+        }
+
+        .section {
+          margin: 0 !important;
+          padding: 0 !important;
+          margin-bottom: 0px !important;
+        }
+
+        h2 {
+          margin: 0 !important;
+          padding: 2px 0 !important;
+          font-size: 16px !important;
+          text-align: center !important;
+        }
+
+        h3 {
+          margin: 0 !important;
+          padding: 0px 0 !important;
+          margin-top: 5px !important;
+          margin-bottom: 2px !important;
+          font-size: 14px !important;
+          text-align: center !important;
+        }
+
+        .info-grid {
+          margin: 0 !important;
+          padding: 2px 0 !important;
+          gap: 3px !important;
+          display: grid !important;
+          grid-template-columns: repeat(3, 1fr) !important;
+          margin-bottom: 5px !important;
+        }
+
+        .info-grid div {
+          margin: 0 !important;
+          padding: 1px !important;
+        }
+
+        .info-grid label {
+          margin: 0 !important;
+          padding: 0 !important;
+          margin-bottom: 1px !important;
+          font-size: 11px !important;
+        }
+
+        input,
+        textarea {
+          margin: 0 !important;
+          padding: 2px !important;
+          font-size: 11px !important;
+        }
+
+        table {
+          margin: 0 !important;
+          padding: 0 !important;
+          margin-top: 0px !important;
+          margin-bottom: 0px !important;
+        }
+
+        th,
+        td {
+          padding: 3px !important;
+          font-size: 11px !important;
+        }
+
+        .signatures {
+          margin: 0 !important;
+          padding: 0 !important;
+          margin-top: 5px !important;
+        }
+
+        .signatures div {
+          margin: 0 !important;
+          padding: 3px !important;
+        }
+
+        .signature-line {
+          height: 40px !important;
+          margin: 3px auto !important;
+        }
+
+        /* Espacios específicos entre páginas */
+        .page-container {
+          border: none !important;
+          background: white !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          page-break-inside: avoid !important;
+          height: auto !important;
+        }
+
+        .page-1 .section:last-child {
+          margin-bottom: 0 !important;
+        }
+
+        .page-2 .section {
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+        }
+
+        .page-3 .section {
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+        }
+
+        /* Asegurar saltos de página en PDF */
+        .page-1 {
+          page-break-after: always !important;
+        }
+
+        .page-2 {
+          page-break-after: always !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="container" id="formulario">
-      <h2>Servicio Automotriz AAG Cotización</h2>
-      <br />
-
-      <section class="info-grid">
-        <div>
-          <label>FECHA:</label>
-          <input
-            type="text"
-            id="fecha"
-            placeholder="San Salvador, __ de ____ de 2025"
-          />
-        </div>
-        <div>
-          <label>NOMBRE:</label>
-          <input type="text" id="nombre" placeholder="Nombre del cliente" />
-        </div>
-        <div>
-          <label>VEHÍCULO:</label>
-          <input type="text" id="vehiculo" placeholder="Marca" />
-        </div>
-        <div>
-          <label>MODELO:</label>
-          <input type="text" id="modelo" placeholder="Modelo" />
-        </div>
-        <div>
-          <label>AÑO:</label>
-          <input type="text" id="ano" placeholder="Año" />
-        </div>
-        <div>
-          <label>PLACA:</label>
-          <input type="text" id="placa" placeholder="Placa" />
-        </div>
-      </section>
-
-      <section class="section" data-tipo="mano" data-filas="5">
-  <h3>Mano de Obra</h3>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 80%">Descripción</th>
-        <th style="width: 30%">Valor</th>
-      </tr>
-    </thead>
-    <tbody class="tabla-contenido"></tbody>
-  </table>
-</section>
-
-<section class="section" data-tipo="externo" data-filas="3">
-  <h3>Trabajo Externo</h3>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 15%">Cant.</th>
-        <th style="width: 55%">Descripción</th>
-        <th style="width: 17%">Valor</th>
-      </tr>
-    </thead>
-    <tbody class="tabla-contenido"></tbody>
-  </table>
-</section>
-
-<section class="section" data-tipo="repuesto" data-filas="12">
-  <h3>Repuestos</h3>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 15%">Cant.</th>
-        <th style="width: 55%">Descripción</th>
-        <th style="width: 17%">Valor</th>
-      </tr>
-    </thead>
-    <tbody class="tabla-contenido"></tbody>
-  </table>
-</section>
-
-
-      <section class="section">
-        <h3>Totales</h3>
-        <table>
-          <tbody>
-            <tr>
-              <td style="width: 75%; font-weight: bold">Mano de Obra</td>
-              <td style="width: 30%">
-                <input
-                  type="text"
-                  id="total_mano"
-                  class="total-auto"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold">Trabajo Externo</td>
-              <td>
-                <input
-                  type="text"
-                  id="total_externo"
-                  class="total-auto"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold">Repuestos</td>
-              <td>
-                <input
-                  type="text"
-                  id="total_repuestos"
-                  class="total-auto"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold">Subtotal</td>
-              <td>
-                <input
-                  type="text"
-                  id="subtotal"
-                  class="total-auto"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold">IVA (13%)</td>
-              <td>
-                <input
-                  type="text"
-                  id="iva"
-                  class="total-auto"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-            <tr>
-  <td style="font-weight: bold">Retención del 1 %</td>
-  <td>
-    <input
-      type="text"
-      id="retencion"
-      class="total-auto"
-      readonly
-      placeholder="$ 0.00"
-    />
-  </td>
-</tr>
-            <tr style="background-color: #f0f0f0">
-              <td style="font-weight: bold; font-size: 16px">Total General</td>
-              <td>
-                <input
-                  type="text"
-                  id="total_general"
-                  class="total-auto"
-                  style="font-weight: bold; font-size: 16px"
-                  readonly
-                  placeholder="$ 0.00"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="section">
-        <h3>Notas Importantes</h3>
-        <textarea
-          id="notas"
-          placeholder="Escribe aquí las notas relevantes..."
-          style="min-height: 80px"
-          maxlength="500"
-        ></textarea>
-      </section>
-
-      <section class="signatures">
-        <div>
-          <div class="signature-container">
-            <div class="signature-line">
-              <img
-                id="signatureImage"
-                class="signature-image"
-                style="display: none"
-              />
-              <button
-                class="upload-btn"
-                onclick="document.getElementById('signatureFile').click()"
-              >
-                Subir Firma
-              </button>
-              <input
-                type="file"
-                id="signatureFile"
-                class="file-input"
-                accept="image/*"
-              />
-            </div>
+      <!-- PÁGINA 1: Encabezado, información del cliente y Mano de Obra -->
+      <div class="page-container page-1">
+        <h2>Servicio Automotriz AAG Cotización</h2>
+        <br /><br /><br /><br />
+        <section class="info-grid">
+          <div>
+            <label>FECHA:</label>
+            <input
+              type="text"
+              id="fecha"
+              placeholder="San Salvador, __ de ____ de 2025"
+            />
           </div>
-          <p style="font-weight: bold">Marlon Guevara</p>
-          <p style="font-size: 12px; color: #666">Técnico Responsable</p>
-        </div>
-        <div>
-          <p
-            style="
-              border-bottom: 2px solid #333;
-              width: 200px;
-              height: 60px;
-              margin: 0 auto 10px auto;
-            "
-          >
-            &nbsp;
-          </p>
-          <br><br>
-          <p style="font-weight: bold">Cliente Autorizado</p>
-          <p style="font-size: 12px; color: #666">Firma</p>
-        </div>
-      </section>
+          <div>
+            <label>NOMBRE:</label>
+            <input type="text" id="nombre" placeholder="Nombre del cliente" />
+          </div>
+          <div>
+            <label>VEHÍCULO:</label>
+            <input type="text" id="vehiculo" placeholder="Marca" />
+          </div>
+          <div>
+            <label>MODELO:</label>
+            <input type="text" id="modelo" placeholder="Modelo" />
+          </div>
+          <div>
+            <label>AÑO:</label>
+            <input type="text" id="ano" placeholder="Año" />
+          </div>
+          <div>
+            <label>PLACA:</label>
+            <input type="text" id="placa" placeholder="Placa" />
+          </div>
+        </section>
+
+        <section class="section" data-tipo="mano" data-filas="5">
+          <h3>Mano de Obra</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 70%">Descripción</th>
+                <th style="width: 30%">Valor</th>
+              </tr>
+            </thead>
+            <tbody class="tabla-contenido"></tbody>
+          </table>
+        </section>
+      </div>
+      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      <!-- PÁGINA 2: Trabajo Externo y Repuestos -->
+      <div class="page-container page-2">
+        <section class="section" data-tipo="externo" data-filas="5">
+          <h3>Trabajo Externo</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 15%">Cant.</th>
+                <th style="width: 55%">Descripción</th>
+                <th style="width: 30%">Valor</th>
+              </tr>
+            </thead>
+            <tbody class="tabla-contenido"></tbody>
+          </table>
+        </section>
+
+        <section class="section" data-tipo="repuesto" data-filas="10">
+          <h3>Repuestos</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 15%">Cant.</th>
+                <th style="width: 55%">Descripción</th>
+                <th style="width: 30%">Valor</th>
+              </tr>
+            </thead>
+            <tbody class="tabla-contenido"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <!-- PÁGINA 3: Totales, Notas y Firmas -->
+      <div class="page-container page-3">
+        <section class="section">
+          <h3>Totales</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td style="width: 70%; font-weight: bold">Mano de Obra</td>
+                <td style="width: 30%">
+                  <input
+                    type="text"
+                    id="total_mano"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold">Trabajo Externo</td>
+                <td>
+                  <input
+                    type="text"
+                    id="total_externo"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold">Repuestos</td>
+                <td>
+                  <input
+                    type="text"
+                    id="total_repuestos"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold">Subtotal</td>
+                <td>
+                  <input
+                    type="text"
+                    id="subtotal"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold">IVA (13%)</td>
+                <td>
+                  <input
+                    type="text"
+                    id="iva"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold">Retención del 1%</td>
+                <td>
+                  <input
+                    type="text"
+                    id="retencion"
+                    class="total-auto"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+              <tr style="background-color: #f0f0f0">
+                <td style="font-weight: bold; font-size: 16px">
+                  Total General
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="total_general"
+                    class="total-auto"
+                    style="font-weight: bold; font-size: 16px"
+                    readonly
+                    placeholder="$ 0.00"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section">
+          <h3>Notas Importantes</h3>
+          <textarea
+            id="notas"
+            placeholder="Escribe aquí las notas relevantes..."
+            style="min-height: 100px"
+            maxlength="500"
+          ></textarea>
+        </section>
+
+        <section class="signatures">
+          <div>
+            <div class="signature-container">
+              <div class="signature-line">
+                <img
+                  id="signatureImage"
+                  class="signature-image"
+                  style="display: none"
+                />
+                <button
+                  class="upload-btn"
+                  onclick="document.getElementById('signatureFile').click()"
+                >
+                  Subir Firma
+                </button>
+                <input
+                  type="file"
+                  id="signatureFile"
+                  class="file-input"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+            <p style="font-weight: bold">Marlon Guevara</p>
+            <p style="font-size: 12px; color: #666">Técnico Responsable</p>
+          </div>
+          <div>
+            <p
+              style="
+                border-bottom: 2px solid #333;
+                width: 200px;
+                height: 60px;
+                margin: 0 auto 10px auto;
+              "
+            >
+              &nbsp;
+            </p>
+            <br /><br />
+            <p style="font-weight: bold">Cliente Autorizado</p>
+            <p style="font-size: 12px; color: #666">Firma</p>
+          </div>
+        </section>
+      </div>
 
       <div class="button-container">
         <button id="openModal" class="button-red">Descargar PDF</button>
@@ -239,7 +730,7 @@
       </div>
     </div>
 
-    <!-- 🔔 MODAL -->
+    <!-- MODAL -->
     <div id="modalConfirm" class="modal">
       <div class="modal-content">
         <h3>¿Deseas descargar este formulario en PDF?</h3>
@@ -250,6 +741,290 @@
       </div>
     </div>
 
-   <script src="R.js"></script>
+    <script>
+      // Función para auto-expandir textarea (solo verticalmente)
+      function autoExpandTextarea(textarea) {
+        textarea.style.height = "auto";
+        const newHeight = Math.max(textarea.scrollHeight, 40);
+        textarea.style.height = newHeight + "px";
+
+        // También expandir la celda padre si existe
+        const td = textarea.parentElement;
+        if (td && td.tagName === "TD") {
+          td.style.height = "auto";
+          td.style.minHeight = newHeight + 16 + "px";
+        }
+      }
+
+      // Función para generar filas dinámicamente SOLO AL INICIO
+      function generarFilas() {
+        const secciones = document.querySelectorAll("section[data-tipo]");
+
+        secciones.forEach((section) => {
+          const tipo = section.dataset.tipo;
+          const totalFilas = parseInt(section.dataset.filas);
+          const tbody = section.querySelector(".tabla-contenido");
+
+          if (!tbody) {
+            console.error(`No se encontró tbody para la sección ${tipo}`);
+            return;
+          }
+
+          // Solo generar si no hay filas (para evitar borrar datos)
+          if (tbody.children.length === 0) {
+            for (let i = 1; i <= totalFilas; i++) {
+              let fila = document.createElement("tr");
+
+              if (tipo === "mano") {
+                fila.innerHTML = `
+                  <td>
+                    <textarea id="mano_desc_${i}" placeholder="Descripción..." maxlength="200" oninput="autoExpandTextarea(this)"></textarea>
+                  </td>
+                  <td>
+                    <input type="text" id="mano_valor_${i}" class="valor-input" placeholder="0.00" />
+                  </td>
+                `;
+              } else {
+                const prefix = tipo === "externo" ? "ext" : "rep";
+                const descPlaceholder =
+                  tipo === "externo"
+                    ? "Descripción del servicio"
+                    : "Descripción del repuesto";
+                fila.innerHTML = `
+                  <td><input type="text" id="${prefix}_cant_${i}" placeholder="1" /></td>
+                  <td><input type="text" id="${prefix}_desc_${i}" placeholder="${descPlaceholder}" maxlength="100" /></td>
+                  <td><input type="text" id="${prefix}_valor_${i}" class="valor-input" placeholder="0.00" /></td>
+                `;
+              }
+
+              tbody.appendChild(fila);
+            }
+          }
+        });
+      }
+
+      // Función para calcular totales automáticamente
+      function calcularTotales() {
+        let totalMano = 0;
+        for (let i = 1; i <= 5; i++) {
+          const elemento = document.getElementById(`mano_valor_${i}`);
+          if (elemento) {
+            const valor = parseFloat(elemento.value) || 0;
+            totalMano += valor;
+          }
+        }
+        const totalManoElement = document.getElementById("total_mano");
+        if (totalManoElement) {
+          totalManoElement.value = `$ ${totalMano.toFixed(2)}`;
+        }
+
+        let totalExterno = 0;
+        for (let i = 1; i <= 5; i++) {
+          const elemento = document.getElementById(`ext_valor_${i}`);
+          if (elemento) {
+            const valor = parseFloat(elemento.value) || 0;
+            totalExterno += valor;
+          }
+        }
+        const totalExternoElement = document.getElementById("total_externo");
+        if (totalExternoElement) {
+          totalExternoElement.value = `$ ${totalExterno.toFixed(2)}`;
+        }
+
+        let totalRepuestos = 0;
+        for (let i = 1; i <= 10; i++) {
+          const elemento = document.getElementById(`rep_valor_${i}`);
+          if (elemento) {
+            const valor = parseFloat(elemento.value) || 0;
+            totalRepuestos += valor;
+          }
+        }
+        const totalRepuestosElement =
+          document.getElementById("total_repuestos");
+        if (totalRepuestosElement) {
+          totalRepuestosElement.value = `$ ${totalRepuestos.toFixed(2)}`;
+        }
+
+        const subtotal = totalMano + totalExterno + totalRepuestos;
+        const subtotalElement = document.getElementById("subtotal");
+        if (subtotalElement) {
+          subtotalElement.value = `$ ${subtotal.toFixed(2)}`;
+        }
+
+        const iva = subtotal * 0.13;
+        const ivaElement = document.getElementById("iva");
+        if (ivaElement) {
+          ivaElement.value = `$ ${iva.toFixed(2)}`;
+        }
+
+        // Calcular retención del 1% SOLO si el subtotal es >= $100
+        let retencion = 0;
+        if (subtotal >= 100) {
+          retencion = subtotal * 0.01;
+        }
+        const retencionElement = document.getElementById("retencion");
+        if (retencionElement) {
+          retencionElement.value = `$ ${retencion.toFixed(2)}`;
+        }
+
+        const totalGeneral = subtotal + iva - retencion;
+        const totalGeneralElement = document.getElementById("total_general");
+        if (totalGeneralElement) {
+          totalGeneralElement.value = `$ ${totalGeneral.toFixed(2)}`;
+        }
+      }
+
+      // Función para agregar event listeners a los campos de valor
+      function agregarEventListeners() {
+        const valorInputs = document.querySelectorAll(".valor-input");
+        valorInputs.forEach((input) => {
+          input.addEventListener("input", calcularTotales);
+        });
+      }
+
+      // Función principal para descargar PDF (CORREGIDA)
+      function descargarPDF() {
+        const formularioElement = document.getElementById("formulario");
+        if (!formularioElement) {
+          console.error("No se encontró el elemento formulario");
+          return;
+        }
+
+        // Recalcular totales antes de generar PDF (sin regenerar filas)
+        calcularTotales();
+
+        const botones = document.querySelector(".button-container");
+        const uploadButtons = document.querySelectorAll(".upload-btn");
+        const fileInputs = document.querySelectorAll(".file-input");
+
+        // Ocultar elementos no deseados en el PDF
+        if (botones) botones.style.display = "none";
+        uploadButtons.forEach((btn) => (btn.style.display = "none"));
+        fileInputs.forEach((input) => (input.style.display = "none"));
+
+        const opciones = {
+          margin: [5, 5, 5, 5],
+          filename: "Cotizacion_AAG.pdf",
+          image: { type: "jpeg", quality: 0.95 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+            allowTaint: true,
+            width: 800,
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: 800,
+            windowHeight: 1200,
+          },
+          jsPDF: {
+            unit: "mm",
+            format: "a4",
+            orientation: "portrait",
+            compress: true,
+          },
+        };
+
+        html2pdf()
+          .from(formularioElement)
+          .set(opciones)
+          .save()
+          .then(() => {
+            // Mostrar botones después de la generación del PDF
+            if (botones) botones.style.display = "flex";
+            uploadButtons.forEach((btn) => {
+              const signatureImage =
+                btn.parentElement.querySelector(".signature-image");
+              if (!signatureImage || signatureImage.style.display === "none") {
+                btn.style.display = "block";
+              }
+            });
+            console.log("PDF generado exitosamente");
+          })
+          .catch((error) => {
+            console.error("Error al generar PDF:", error);
+            // Mostrar botones en caso de error
+            if (botones) botones.style.display = "flex";
+            uploadButtons.forEach((btn) => {
+              const signatureImage =
+                btn.parentElement.querySelector(".signature-image");
+              if (!signatureImage || signatureImage.style.display === "none") {
+                btn.style.display = "block";
+              }
+            });
+          });
+      }
+
+      // Event listeners principales
+      document.addEventListener("DOMContentLoaded", function () {
+        // Generar filas SOLO al cargar la página
+        generarFilas();
+        agregarEventListeners();
+
+        const notasTextarea = document.getElementById("notas");
+        if (notasTextarea) {
+          notasTextarea.addEventListener("input", function () {
+            autoExpandTextarea(this);
+          });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById("modalConfirm");
+        const openModalBtn = document.getElementById("openModal");
+        const confirmBtn = document.getElementById("confirmDownload");
+        const cancelBtn = document.getElementById("cancelModal");
+
+        if (openModalBtn && modal) {
+          openModalBtn.addEventListener("click", function () {
+            modal.style.display = "block";
+          });
+        }
+
+        if (cancelBtn && modal) {
+          cancelBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+          });
+        }
+
+        // Cerrar modal al hacer click fuera
+        window.addEventListener("click", function (event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+
+        // Función principal para descargar PDF
+        if (confirmBtn) {
+          confirmBtn.addEventListener("click", function () {
+            if (modal) {
+              modal.style.display = "none";
+            }
+            descargarPDF();
+          });
+        }
+
+        // Función para manejar la subida de firma
+        const signatureFile = document.getElementById("signatureFile");
+        const signatureImage = document.getElementById("signatureImage");
+        const uploadBtn = document.querySelector(".upload-btn");
+
+        if (signatureFile && signatureImage) {
+          signatureFile.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                signatureImage.src = e.target.result;
+                signatureImage.style.display = "block";
+                if (uploadBtn) {
+                  uploadBtn.style.display = "none";
+                }
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
