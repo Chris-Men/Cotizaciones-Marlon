@@ -808,8 +808,9 @@
                     : "Descripción del repuesto";
                 fila.innerHTML = `
                   <td><input type="text" id="${prefix}_cant_${i}" placeholder="1" /></td>
-                  <td><input type="text" id="${prefix}_desc_${i}" placeholder="${descPlaceholder}" maxlength="100" /></td>
-                  <td><input type="text" id="${prefix}_valor_${i}" class="valor-input" placeholder="0.00" /></td>
+<td>
+  <textarea id="ext_desc_${i}" placeholder="Descripción del servicio" maxlength="200" oninput="autoExpandTextarea(this)"></textarea>
+</td>                  <td><input type="text" id="${prefix}_valor_${i}" class="valor-input" placeholder="0.00" /></td>
                 `;
               }
 

@@ -69,11 +69,6 @@
         min-height: 10px;
       }
 
-      .section {
-        margin-bottom: 20px;
-        break-inside: avoid;
-      }
-
       /* Contenedores de páginas */
       .page-container {
         margin-bottom: 20px;
@@ -89,10 +84,6 @@
 
       .page-2 {
         page-break-after: always;
-      }
-
-      .page-3 {
-        /* Última página, no necesita page-break */
       }
 
       table {
@@ -376,12 +367,6 @@
 
         .upload-btn {
           display: none !important;
-        }
-
-        .section {
-          margin: 0 !important;
-          padding: 0 !important;
-          margin-bottom: 0px !important;
         }
 
         h2 {
@@ -797,8 +782,9 @@
                     : "Descripción del repuesto";
                 fila.innerHTML = `
                   <td><input type="text" id="${prefix}_cant_${i}" placeholder="1" /></td>
-                  <td><input type="text" id="${prefix}_desc_${i}" placeholder="${descPlaceholder}" maxlength="100" /></td>
-                  <td><input type="text" id="${prefix}_valor_${i}" class="valor-input" placeholder="0.00" /></td>
+<td>
+  <textarea id="ext_desc_${i}" placeholder="Descripción del servicio" maxlength="200" oninput="autoExpandTextarea(this)"></textarea>
+</td>                  <td><input type="text" id="${prefix}_valor_${i}" class="valor-input" placeholder="0.00" /></td>
                 `;
               }
 

@@ -7,3 +7,16 @@ br.hidden-print {
         display: inline;
     }
 }
+
+
+
+.section {
+    margin-bottom: 20px;
+    break-inside: avoid;
+}
+
+.section {
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 0px !important;
+}
