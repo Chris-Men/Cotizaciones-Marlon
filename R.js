@@ -21,11 +21,13 @@ function generarFilas() {
     const totalFilas = parseInt(section.dataset.filas);
     const tbody = section.querySelector('.tabla-contenido');
 
+    // Verificar que el tbody existe
     if (!tbody) {
       console.error(`No se encontró tbody para la sección ${tipo}`);
       return;
     }
 
+    // Limpiar contenido existente
     tbody.innerHTML = '';
 
     for (let i = 1; i <= totalFilas; i++) {
@@ -57,6 +59,7 @@ function generarFilas() {
 
 // Función para calcular totales automáticamente
 function calcularTotales() {
+  // Calcular total mano de obra
   let totalMano = 0;
   for (let i = 1; i <= 5; i++) {
     const elemento = document.getElementById(`mano_valor_${i}`);
@@ -70,6 +73,7 @@ function calcularTotales() {
     totalManoElement.value = `$ ${totalMano.toFixed(2)}`;
   }
 
+  // Calcular total trabajo externo
   let totalExterno = 0;
   for (let i = 1; i <= 3; i++) {
     const elemento = document.getElementById(`ext_valor_${i}`);
@@ -83,6 +87,7 @@ function calcularTotales() {
     totalExternoElement.value = `$ ${totalExterno.toFixed(2)}`;
   }
 
+  // Calcular total repuestos
   let totalRepuestos = 0;
   for (let i = 1; i <= 12; i++) {
     const elemento = document.getElementById(`rep_valor_${i}`);
@@ -96,19 +101,32 @@ function calcularTotales() {
     totalRepuestosElement.value = `$ ${totalRepuestos.toFixed(2)}`;
   }
 
+  // Calcular subtotal
   const subtotal = totalMano + totalExterno + totalRepuestos;
   const subtotalElement = document.getElementById('subtotal');
   if (subtotalElement) {
     subtotalElement.value = `$ ${subtotal.toFixed(2)}`;
   }
 
+  // Calcular IVA (13%)
   const iva = subtotal * 0.13;
   const ivaElement = document.getElementById('iva');
   if (ivaElement) {
     ivaElement.value = `$ ${iva.toFixed(2)}`;
   }
 
-  const totalGeneral = subtotal + iva;
+  // Calcular retención del 1% SOLO si el subtotal es >= $100
+  let retencion = 0;
+  if (subtotal >= 100) {
+    retencion = subtotal * 0.01;
+  }
+  const retencionElement = document.getElementById('retencion');
+  if (retencionElement) {
+    retencionElement.value = `$ ${retencion.toFixed(2)}`;
+  }
+
+  // Calcular total general (subtotal + IVA - retención)
+  const totalGeneral = subtotal + iva - retencion;
   const totalGeneralElement = document.getElementById('total_general');
   if (totalGeneralElement) {
     totalGeneralElement.value = `$ ${totalGeneral.toFixed(2)}`;
@@ -117,6 +135,7 @@ function calcularTotales() {
 
 // Función para agregar event listeners a los campos de valor
 function agregarEventListeners() {
+  // Agregar event listeners a todos los campos de valor
   const valorInputs = document.querySelectorAll('.valor-input');
   valorInputs.forEach(input => {
     input.addEventListener('input', calcularTotales);
@@ -125,9 +144,13 @@ function agregarEventListeners() {
 
 // Event listeners principales
 document.addEventListener('DOMContentLoaded', function() {
+  // Primero generar las filas
   generarFilas();
+  
+  // Luego agregar los event listeners
   agregarEventListeners();
 
+  // Auto-expandir textarea de notas
   const notasTextarea = document.getElementById('notas');
   if (notasTextarea) {
     notasTextarea.addEventListener('input', function() {
@@ -156,7 +179,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
-
-  
 });

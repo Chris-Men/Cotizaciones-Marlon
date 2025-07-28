@@ -2,86 +2,254 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loader con Botón Volver</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f9f9f9;
-        font-family: sans-serif;
-      }
-
-      .loader {
-        width: 70px;
-        aspect-ratio: 1;
-        background: radial-gradient(farthest-side, #ffa516 90%, #0000)
-            center/16px 16px,
-          radial-gradient(farthest-side, green 90%, #0000) bottom/12px 12px;
-        background-repeat: no-repeat;
-        animation: l17 1s infinite linear;
-        position: relative;
-        margin-bottom: 40px;
-      }
-
-      .loader::before {
-        content: "";
-        position: absolute;
-        width: 8px;
-        aspect-ratio: 1;
-        inset: auto 0 16px;
-        margin: auto;
-        background: #ccc;
-        border-radius: 50%;
-        transform-origin: 50% calc(100% + 10px);
-        animation: inherit;
-        animation-duration: 0.5s;
-      }
-
-      @keyframes l17 {
-        100% {
-          transform: rotate(1turn);
-        }
-      }
-
-      .button-33 {
-        background-color: #c2fbd7;
-        border-radius: 100px;
-        box-shadow: rgba(44, 187, 99, 0.2) 0 -25px 18px -14px inset,
-          rgba(44, 187, 99, 0.15) 0 1px 2px, rgba(44, 187, 99, 0.15) 0 2px 4px,
-          rgba(44, 187, 99, 0.15) 0 4px 8px, rgba(44, 187, 99, 0.15) 0 8px 16px,
-          rgba(44, 187, 99, 0.15) 0 16px 32px;
-        color: green;
-        cursor: pointer;
-        display: inline-block;
-        font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto,
-          sans-serif;
-        padding: 10px 30px;
-        text-align: center;
-        text-decoration: none;
-        transition: all 250ms;
-        border: 0;
-        font-size: 18px;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-      }
-
-      .button-33:hover {
-        box-shadow: rgba(44, 187, 99, 0.35) 0 -25px 18px -14px inset,
-          rgba(44, 187, 99, 0.25) 0 1px 2px, rgba(44, 187, 99, 0.25) 0 2px 4px,
-          rgba(44, 187, 99, 0.25) 0 4px 8px, rgba(44, 187, 99, 0.25) 0 8px 16px,
-          rgba(44, 187, 99, 0.25) 0 16px 32px;
-        transform: scale(1.05) rotate(-1deg);
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cotizaciones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+   <link rel="stylesheet" href="style.css">
+    
+   </ion-card>
   </head>
   <body>
-    <div class="loader"></div>
-    <a href="index.html" class="button-33" role="button">Volver</a>
+    <div class="container" id="formulario">
+      <h2>Servicio Automotriz AAG Cotización</h2>
+      <br />
+
+      <section class="info-grid">
+        <div>
+          <label>FECHA:</label>
+          <input
+            type="text"
+            id="fecha"
+            placeholder="San Salvador, __ de ____ de 2025"
+          />
+        </div>
+        <div>
+          <label>NOMBRE:</label>
+          <input type="text" id="nombre" placeholder="Nombre del cliente" />
+        </div>
+        <div>
+          <label>VEHÍCULO:</label>
+          <input type="text" id="vehiculo" placeholder="Marca" />
+        </div>
+        <div>
+          <label>MODELO:</label>
+          <input type="text" id="modelo" placeholder="Modelo" />
+        </div>
+        <div>
+          <label>AÑO:</label>
+          <input type="text" id="ano" placeholder="Año" />
+        </div>
+        <div>
+          <label>PLACA:</label>
+          <input type="text" id="placa" placeholder="Placa" />
+        </div>
+      </section>
+
+      <section class="section" data-tipo="mano" data-filas="5">
+  <h3>Mano de Obra</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 80%">Descripción</th>
+        <th style="width: 30%">Valor</th>
+      </tr>
+    </thead>
+    <tbody class="tabla-contenido"></tbody>
+  </table>
+</section>
+
+<section class="section" data-tipo="externo" data-filas="3">
+  <h3>Trabajo Externo</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%">Cant.</th>
+        <th style="width: 55%">Descripción</th>
+        <th style="width: 17%">Valor</th>
+      </tr>
+    </thead>
+    <tbody class="tabla-contenido"></tbody>
+  </table>
+</section>
+
+<section class="section" data-tipo="repuesto" data-filas="12">
+  <h3>Repuestos</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%">Cant.</th>
+        <th style="width: 55%">Descripción</th>
+        <th style="width: 17%">Valor</th>
+      </tr>
+    </thead>
+    <tbody class="tabla-contenido"></tbody>
+  </table>
+</section>
+
+
+      <section class="section">
+        <h3>Totales</h3>
+        <table>
+          <tbody>
+            <tr>
+              <td style="width: 75%; font-weight: bold">Mano de Obra</td>
+              <td style="width: 30%">
+                <input
+                  type="text"
+                  id="total_mano"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold">Trabajo Externo</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_externo"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold">Repuestos</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_repuestos"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold">Subtotal</td>
+              <td>
+                <input
+                  type="text"
+                  id="subtotal"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold">IVA (13%)</td>
+              <td>
+                <input
+                  type="text"
+                  id="iva"
+                  class="total-auto"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+            <tr>
+  <td style="font-weight: bold">Retención del 1 %</td>
+  <td>
+    <input
+      type="text"
+      id="retencion"
+      class="total-auto"
+      readonly
+      placeholder="$ 0.00"
+    />
+  </td>
+</tr>
+            <tr style="background-color: #f0f0f0">
+              <td style="font-weight: bold; font-size: 16px">Total General</td>
+              <td>
+                <input
+                  type="text"
+                  id="total_general"
+                  class="total-auto"
+                  style="font-weight: bold; font-size: 16px"
+                  readonly
+                  placeholder="$ 0.00"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h3>Notas Importantes</h3>
+        <textarea
+          id="notas"
+          placeholder="Escribe aquí las notas relevantes..."
+          style="min-height: 80px"
+          maxlength="500"
+        ></textarea>
+      </section>
+
+      <section class="signatures">
+        <div>
+          <div class="signature-container">
+            <div class="signature-line">
+              <img
+                id="signatureImage"
+                class="signature-image"
+                style="display: none"
+              />
+              <button
+                class="upload-btn"
+                onclick="document.getElementById('signatureFile').click()"
+              >
+                Subir Firma
+              </button>
+              <input
+                type="file"
+                id="signatureFile"
+                class="file-input"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <p style="font-weight: bold">Marlon Guevara</p>
+          <p style="font-size: 12px; color: #666">Técnico Responsable</p>
+        </div>
+        <div>
+          <p
+            style="
+              border-bottom: 2px solid #333;
+              width: 200px;
+              height: 60px;
+              margin: 0 auto 10px auto;
+            "
+          >
+            &nbsp;
+          </p>
+          <br><br>
+          <p style="font-weight: bold">Cliente Autorizado</p>
+          <p style="font-size: 12px; color: #666">Firma</p>
+        </div>
+      </section>
+
+      <div class="button-container">
+        <button id="openModal" class="button-red">Descargar PDF</button>
+        <a href="index.html" class="button-33">Volver</a>
+      </div>
+    </div>
+
+    <!-- 🔔 MODAL -->
+    <div id="modalConfirm" class="modal">
+      <div class="modal-content">
+        <h3>¿Deseas descargar este formulario en PDF?</h3>
+        <div class="modal-buttons">
+          <button class="button-red" id="confirmDownload">Sí, descargar</button>
+          <button class="button-33" id="cancelModal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+   <script src="R.js"></script>
   </body>
 </html>
